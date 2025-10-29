@@ -19,7 +19,7 @@ namespace lab5_part1
 
                 double result = DivideNumbers(num1, num2);
 
-                // Check for special cases with floating-point division
+                
                 if (double.IsInfinity(result))
                 {
                     throw new DivideByZeroException("Division by zero is not allowed.");
