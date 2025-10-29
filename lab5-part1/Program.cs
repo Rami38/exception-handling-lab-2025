@@ -10,28 +10,37 @@ namespace lab5_part1
             try
             {
                 Console.Write("Enter first number: ");
-                double num1 = Convert.ToDouble(Console.ReadLine());
-
+                string input1 = Console.ReadLine();
                 Console.Write("Enter second number: ");
-                double num2 = Convert.ToDouble(Console.ReadLine());
+                string input2 = Console.ReadLine();
+
+                double num1 = Convert.ToDouble(input1);
+                double num2 = Convert.ToDouble(input2);
 
                 double result = DivideNumbers(num1, num2);
+
+                // Check for special cases with floating-point division
+                if (double.IsInfinity(result))
+                {
+                    throw new DivideByZeroException("Division by zero is not allowed.");
+                }
+
                 Console.WriteLine($"Result: {result}");
             }
-            catch (FormatException ex)
+            catch (FormatException)
             {
-                Console.WriteLine($"Error: Invalid input format. {ex.Message}");
-                LogToEventViewer($"FormatException: {ex.Message}");
+                Console.WriteLine("Error: Please enter valid numbers only.");
+                LogToEventViewer("FormatException: Invalid number format");
             }
             catch (DivideByZeroException ex)
             {
-                Console.WriteLine($"Error: Cannot divide by zero. {ex.Message}");
+                Console.WriteLine($"Error: {ex.Message}");
                 LogToEventViewer($"DivideByZeroException: {ex.Message}");
             }
-            catch (OverflowException ex)
+            catch (OverflowException)
             {
-                Console.WriteLine($"Error: Number is too large or too small. {ex.Message}");
-                LogToEventViewer($"OverflowException: {ex.Message}");
+                Console.WriteLine("Error: The number is too large or too small.");
+                LogToEventViewer("OverflowException: Number out of range");
             }
             catch (Exception ex)
             {
@@ -41,6 +50,8 @@ namespace lab5_part1
             finally
             {
                 Console.WriteLine("Operation completed.");
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
             }
         }
 
@@ -57,6 +68,7 @@ namespace lab5_part1
                 {
                     eventLog.Source = "Application";
                     eventLog.WriteEntry(message, EventLogEntryType.Error, 101, 1);
+                    Console.WriteLine($"Logged to Event Viewer: {message}");
                 }
             }
             catch (Exception ex)
